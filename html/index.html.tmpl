@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <title>JAG</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/resources/styles.css">
+
+    <link rel="icon" type="image/png" sizes="16x16" href="/resources/favicon-16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/resources/favicon-32.png">
+</head>
+
+<body>
+    <div class="content">
+      <img class="logo" src="resources/logo.svg"/>
+      <div class="image-grid">
+      {{range .}}
+        <div class="image-container">
+          <a href="library/{{.ImageName}}">
+            <img src="thumbnails/{{.ThumbnailName}}" loading="lazy"/>
+          </a>
+        </div>
+      {{end}}
+      </div>
+    </div>
+</body>
+
+</html>

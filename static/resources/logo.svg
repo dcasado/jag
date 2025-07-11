@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="32"
+   height="32"
+   viewBox="0 0 32 32"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.4 (e7c3feb, 2024-10-09)"
+   sodipodi:docname="logo.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="px"
+     inkscape:zoom="16"
+     inkscape:cx="18.71875"
+     inkscape:cy="17.78125"
+     inkscape:window-width="2560"
+     inkscape:window-height="1368"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs1" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <path
+       id="text2"
+       style="font-size:40.8163px;font-family:'Adwaita Mono';-inkscape-font-specification:'Adwaita Mono, Normal';display:inline;opacity:0.493428;fill:#000000;fill-opacity:1;stroke-width:3.40136"
+       inkscape:label="A"
+       d="M 14.041016 1 L 6.203125 31 L 9.7148438 31 L 10.140625 29.265625 C 10.556979 29.595848 11.005641 29.88075 11.486328 30.121094 C 12.178737 30.440668 12.896906 30.667626 13.642578 30.800781 C 14.414881 30.933937 15.188634 31 15.960938 31 C 16.733241 31 17.490657 30.93394 18.236328 30.800781 C 19.008631 30.667626 19.741184 30.440668 20.433594 30.121094 C 20.946907 29.864437 21.416203 29.55641 21.841797 29.197266 L 22.285156 31 L 25.796875 31 L 18.728516 3.9472656 L 21.167969 3.9472656 L 24.519531 3.9472656 L 24.519531 1 L 17.958984 1 L 14.707031 1 L 14.041016 1 z M 16 5.3671875 L 16.652344 8.2246094 C 16.897242 9.1497788 17.12997 10.07483 17.347656 11 L 19.673828 20.388672 L 20.408203 23.367188 L 20.832031 25.089844 C 20.794278 25.182833 20.756125 25.275315 20.712891 25.367188 C 20.526473 25.793284 20.260267 26.19357 19.914062 26.566406 C 19.59449 26.912611 19.222973 27.205634 18.796875 27.445312 C 18.370777 27.684994 17.904429 27.843935 17.398438 27.923828 C 16.919076 28.003718 16.440297 28.042969 15.960938 28.042969 C 15.481575 28.042969 14.988414 28.003719 14.482422 27.923828 C 14.003062 27.843938 13.549145 27.684993 13.123047 27.445312 C 12.696948 27.205634 12.311048 26.912611 11.964844 26.566406 C 11.64527 26.19357 11.379065 25.793285 11.166016 25.367188 C 11.151667 25.332341 11.140659 25.296727 11.126953 25.261719 L 11.591797 23.367188 L 12.326172 20.388672 L 14.652344 11 L 15.306641 8.2246094 C 15.551539 7.272229 15.782313 6.3195678 16 5.3671875 z " />
+  </g>
+</svg>
