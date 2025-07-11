@@ -44,7 +44,7 @@ func GenerateAllThumbnails(libraryPath string, thumbnailsPath string) error {
 			_, err = GenerateThumbnail(imageFile, thumbnailsPath)
 			imageFile.Close()
 			if err != nil {
-				log.Fatalf("could not generate thumbnail for image %s. %v", imageName, err)
+				log.Printf("could not generate thumbnail for file %s. %v", imageName, err)
 			}
 		}
 	}
