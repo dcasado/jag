@@ -21,7 +21,7 @@ func Serve(configuration configuration.Configuration) *http.Server {
 	resources := http.FileServerFS(static.Resources())
 	serveMux.Handle("GET /resources/", resources)
 
-	serveMux.HandleFunc("GET /", index(configuration.LibraryPath()))
+	serveMux.HandleFunc("GET /{$}", index(configuration.LibraryPath()))
 
 	serveMux.HandleFunc("GET /health", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
