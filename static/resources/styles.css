@@ -4,9 +4,12 @@ body {
 
 .content {
   margin: auto;
-  text-align: center;
   max-width: 1200px;
   font-family: Arial;
+}
+
+header {
+  text-align: center;
 }
 
 .logo {
