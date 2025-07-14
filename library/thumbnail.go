@@ -27,16 +27,16 @@ func GenerateAllThumbnails(libraryPath string, thumbnailsPath string) error {
 			return fmt.Errorf("error checking if thumbnails directory %s exsits. %w", thumbnailsPath, err)
 		}
 	}
-	imageNames := ImageNames(libraryPath)
-	for _, imageName := range imageNames {
-		exists, err := Exists(path.Join(thumbnailsPath, imageName))
+	images := Images(libraryPath)
+	for _, image := range images {
+		exists, err := Exists(path.Join(thumbnailsPath, image.Name))
 		if err != nil {
 			log.Fatalf("could not check thumbnail existence. %v", err)
 		}
 
 		if !exists {
 			// Open image file
-			imageFile, err := os.Open(path.Join(libraryPath, imageName))
+			imageFile, err := os.Open(path.Join(libraryPath, image.Name))
 			if err != nil {
 				return fmt.Errorf("error opening image file. %w", err)
 			}
@@ -44,7 +44,7 @@ func GenerateAllThumbnails(libraryPath string, thumbnailsPath string) error {
 			_, err = GenerateThumbnail(imageFile, thumbnailsPath)
 			imageFile.Close()
 			if err != nil {
-				log.Printf("could not generate thumbnail for file %s. %v", imageName, err)
+				log.Printf("could not generate thumbnail for file %s. %v", image.Name, err)
 			}
 		}
 	}

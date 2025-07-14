@@ -4,10 +4,16 @@ import (
 	"log"
 	"os"
 	"slices"
+	"time"
 )
 
-func ImageNames(libraryPath string) []string {
-	var files []string
+type Image struct {
+	Date string
+	Name string
+}
+
+func Images(libraryPath string) []Image {
+	var images []Image
 	f, err := os.Open(libraryPath)
 	if err != nil {
 		log.Fatalf("error opening library folder. %s. %v", libraryPath, err)
@@ -23,8 +29,9 @@ func ImageNames(libraryPath string) []string {
 
 	for _, file := range fileInfos {
 		if !file.IsDir() {
-			files = append(files, file.Name())
+			images = append(images, Image{Date: file.ModTime().Format(time.DateOnly), Name: file.Name()})
 		}
 	}
-	return files
+
+	return images
 }

@@ -13,15 +13,18 @@
 <body>
     <div class="content">
       <img class="logo" src="resources/logo.svg"/>
-      <div class="image-grid">
       {{range .}}
+      <h4>{{.Date}}</h4>
+      <div class="image-grid">
+        {{range .Images}}
         <div class="image-container">
           <a href="library/{{.ImageName}}">
             <img src="thumbnails/{{.ThumbnailName}}" loading="lazy"/>
           </a>
         </div>
-      {{end}}
+        {{end}}
       </div>
+      {{end}}
     </div>
 </body>
 
