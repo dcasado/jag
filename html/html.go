@@ -38,6 +38,10 @@ func Index(w io.Writer, libraryPath string) error {
 	return parseTemplate("index.html.tmpl").Execute(w, data)
 }
 
+func NotFound(w io.Writer) error {
+	return parseTemplate("404.html.tmpl").Execute(w, nil)
+}
+
 func containsBucket(buckets []*bucket, date string) *bucket {
 	for _, bucket := range buckets {
 		if bucket.Date == date {

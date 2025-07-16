@@ -21,6 +21,7 @@ func Serve(configuration configuration.Configuration) *http.Server {
 	resources := http.FileServerFS(static.Resources())
 	serveMux.Handle("GET /resources/", resources)
 
+	serveMux.HandleFunc("GET /", func(w http.ResponseWriter, r *http.Request) { html.NotFound(w) })
 	serveMux.HandleFunc("GET /{$}", index(configuration.LibraryPath()))
 
 	serveMux.HandleFunc("GET /health", func(w http.ResponseWriter, r *http.Request) {
