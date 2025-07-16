@@ -35,7 +35,7 @@ func Index(w io.Writer, libraryPath string) error {
 		}
 	}
 
-	return template.Must(template.New("index.html.tmpl").ParseFS(htmlFiles, "index.html.tmpl")).Execute(w, data)
+	return parseTemplate("index.html.tmpl").Execute(w, data)
 }
 
 func containsBucket(buckets []*bucket, date string) *bucket {
@@ -45,4 +45,9 @@ func containsBucket(buckets []*bucket, date string) *bucket {
 		}
 	}
 	return nil
+}
+
+func parseTemplate(file string) *template.Template {
+	return template.Must(
+		template.New("layout.html.tmpl").ParseFS(htmlFiles, "layout.html.tmpl", file))
 }

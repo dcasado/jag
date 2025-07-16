@@ -1,38 +1,19 @@
-<!DOCTYPE html>
-<html lang="es">
-
-<head>
-    <title>JAG</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href="/resources/styles.css">
-
-    <link rel="icon" type="image/png" sizes="16x16" href="/resources/favicon-16.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/resources/favicon-32.png">
-</head>
-
-<body>
-    <div class="content">
-      <header>
-        <img class="logo" src="resources/logo.svg"/>
-      </header>
-      {{range .}}
-      <h4>{{.Date}}</h4>
-      <div class="image-grid">
-        {{range .Images}}
-        <div class="image-container">
-          <a href="library/{{.ImageName}}">
-            <img src="thumbnails/{{.ThumbnailName}}" loading="lazy"/>
-          </a>
-        </div>
-        {{end}}
-      </div>
-      {{end}}
-    </div>
-    <div class="float">
-      <a href="#top">
-        <input type="button" value="&#8679; Scroll to the top &#8679;"/>
-      </a>
-    </div>
-</body>
-
-</html>
+{{define "content"}}
+{{range .}}
+<h4>{{.Date}}</h4>
+<div class="image-grid">
+{{range .Images}}
+  <div class="image-container">
+    <a href="library/{{.ImageName}}">
+      <img src="thumbnails/{{.ThumbnailName}}" loading="lazy"/>
+    </a>
+  </div>
+{{end}}
+</div>
+{{end}}
+<div class="float">
+  <a href="#top">
+    <input type="button" value="&#8679; Scroll to the top &#8679;"/>
+  </a>
+</div>
+{{end}}
