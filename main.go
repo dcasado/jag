@@ -16,10 +16,12 @@ import (
 func main() {
 	configuration := configuration.New()
 
-	err := library.GenerateAllThumbnails(configuration.LibraryPath(), configuration.ThumbnailsPath())
-	if err != nil {
-		log.Fatalf("error generating thumbnails. %v", err)
-	}
+	go func() {
+		err := library.GenerateAllThumbnails(configuration.LibraryPath(), configuration.ThumbnailsPath())
+		if err != nil {
+			log.Fatalf("error generating thumbnails. %v", err)
+		}
+	}()
 	// Generate thumbnails every 1 hour
 	ticker := time.NewTicker(1 * time.Hour)
 	go func() {
