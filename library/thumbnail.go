@@ -75,8 +75,9 @@ func generateThumbnail(imageFile *os.File, thumbnailsPath string) (string, error
 		return "", fmt.Errorf("error decoding image. %w", err)
 	}
 
-	// Extract original size and scale it
-	newWidth, newHeight := inputImage.Bounds().Max.X/4, inputImage.Bounds().Max.Y/4
+	// Extract ratio and scale the image
+	ratio := float64(inputImage.Bounds().Max.X) / float64(inputImage.Bounds().Bounds().Max.Y)
+	newWidth, newHeight := 350, int(float64(350)/ratio)
 	thumbnailImage := image.NewRGBA(image.Rect(0, 0, newWidth, newHeight))
 	draw.ApproxBiLinear.Scale(thumbnailImage, thumbnailImage.Bounds(), inputImage, inputImage.Bounds(), draw.Over, nil)
 
