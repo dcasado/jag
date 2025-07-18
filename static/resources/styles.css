@@ -44,10 +44,14 @@ header {
    z-index: 9999;
 }
 
-@media (min-width: 600px) {
+@media (min-width: 300px) {
   .image-grid { grid-template-columns: repeat(3, 1fr); }
 }
 
-@media (min-width: 900px) {
+@media (min-width: 600px) {
   .image-grid { grid-template-columns: repeat(4, 1fr); }
+}
+
+@media (min-width: 900px) {
+  .image-grid { grid-template-columns: repeat(5, 1fr); }
 }
