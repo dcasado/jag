@@ -21,7 +21,7 @@ func (e ErrUnexpected) Error() string {
 }
 
 type Image struct {
-	Date          string
+	ModTime       time.Time
 	Path          string
 	Name          string
 	ThumbnailPath string
@@ -77,7 +77,7 @@ func Year(libraryPath string, year string) ([]Image, error) {
 		if !file.IsDir() {
 			imageName := file.Name()
 			imagePath := path.Join(year, file.Name())
-			images = append(images, Image{Date: file.ModTime().Format(time.DateOnly), Path: imagePath, Name: imageName, ThumbnailName: getThumbnailName(imageName), ThumbnailPath: getThumbnailPath(imagePath)})
+			images = append(images, Image{ModTime: file.ModTime(), Path: imagePath, Name: imageName, ThumbnailName: getThumbnailName(imageName), ThumbnailPath: getThumbnailPath(imagePath)})
 		}
 	}
 
