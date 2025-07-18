@@ -41,8 +41,6 @@ func Years(libraryPath string) []string {
 		log.Fatalf("error reading the contents of the library folder. %s. %v", libraryPath, err)
 	}
 
-	slices.SortFunc(fileInfos, func(a, b os.FileInfo) int { return a.ModTime().Compare(b.ModTime()) })
-
 	for _, file := range fileInfos {
 		if file.IsDir() {
 			years = append(years, file.Name())
