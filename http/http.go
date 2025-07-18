@@ -1,12 +1,14 @@
 package http
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"net/http"
 
 	"davidc.es/jag/configuration"
 	"davidc.es/jag/html"
+	"davidc.es/jag/library"
 	"davidc.es/jag/static"
 )
 
@@ -23,6 +25,7 @@ func Serve(configuration configuration.Configuration) *http.Server {
 
 	serveMux.HandleFunc("GET /", func(w http.ResponseWriter, r *http.Request) { html.NotFound(w) })
 	serveMux.HandleFunc("GET /{$}", index(configuration.LibraryPath()))
+	serveMux.HandleFunc("GET /{year}", year(configuration.LibraryPath()))
 
 	serveMux.HandleFunc("GET /health", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
@@ -48,9 +51,36 @@ func Serve(configuration configuration.Configuration) *http.Server {
 
 func index(libraryPath string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		err := html.Index(w, libraryPath)
+		years := library.Years(libraryPath)
+
+		err := html.Index(w, years)
 		if err != nil {
+			html.InternalError(w)
 			log.Printf("error serving index. %v", err)
+			return
+		}
+	}
+}
+
+func year(libraryPath string) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		year := r.PathValue("year")
+
+		images, err := library.Year(libraryPath, year)
+		if err != nil {
+			if errors.Is(err, library.ErrNotExist) {
+				html.NotFound(w)
+				return
+			}
+			html.InternalError(w)
+			return
+		}
+
+		err = html.Year(w, images)
+		if err != nil {
+			html.InternalError(w)
+			log.Printf("error serving year. %v", err)
+			return
 		}
 	}
 }

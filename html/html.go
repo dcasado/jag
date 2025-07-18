@@ -12,8 +12,8 @@ import (
 var htmlFiles embed.FS
 
 type imageData struct {
-	ImageName     string
-	ThumbnailName string
+	ImagePath     string
+	ThumbnailPath string
 }
 
 type bucket struct {
@@ -21,25 +21,38 @@ type bucket struct {
 	Images []imageData
 }
 
-func Index(w io.Writer, libraryPath string) error {
-	images := library.Images(libraryPath)
-	var data []*bucket
-	for _, image := range images {
-		date := image.Date
-		if b := containsBucket(data, date); b != nil {
-			b.Images = append(b.Images, imageData{ImageName: image.Name, ThumbnailName: library.GetThumbnailName(image.Name)})
-		} else {
-			newBucket := &bucket{Date: date, Images: make([]imageData, 0)}
-			newBucket.Images = append(newBucket.Images, imageData{ImageName: image.Name, ThumbnailName: library.GetThumbnailName(image.Name)})
-			data = append(data, newBucket)
-		}
-	}
+type indexData struct {
+	Years []string
+}
+
+func Index(w io.Writer, years []string) error {
+	data := indexData{Years: years}
 
 	return parseTemplate("index.html.tmpl").Execute(w, data)
 }
 
 func NotFound(w io.Writer) error {
 	return parseTemplate("404.html.tmpl").Execute(w, nil)
+}
+
+func InternalError(w io.Writer) error {
+	return parseTemplate("internal_error.html.tmpl").Execute(w, nil)
+}
+
+func Year(w io.Writer, images []library.Image) error {
+	var data []*bucket
+	for _, image := range images {
+		date := image.Date
+		if b := containsBucket(data, date); b != nil {
+			b.Images = append(b.Images, imageData{ImagePath: image.Path, ThumbnailPath: image.ThumbnailPath})
+		} else {
+			newBucket := &bucket{Date: date, Images: make([]imageData, 0)}
+			newBucket.Images = append(newBucket.Images, imageData{ImagePath: image.Path, ThumbnailPath: image.ThumbnailPath})
+			data = append(data, newBucket)
+		}
+	}
+
+	return parseTemplate("year.html.tmpl").Execute(w, data)
 }
 
 func containsBucket(buckets []*bucket, date string) *bucket {

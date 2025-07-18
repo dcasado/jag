@@ -27,31 +27,48 @@ func GenerateAllThumbnails(libraryPath string, thumbnailsPath string) error {
 			return fmt.Errorf("error checking if thumbnails directory %s exsits. %w", thumbnailsPath, err)
 		}
 	}
-	images := Images(libraryPath)
-	for _, image := range images {
-		exists, err := Exists(path.Join(thumbnailsPath, image.Name))
+
+	years := Years(libraryPath)
+	for _, year := range years {
+		libraryYearPath := path.Join(libraryPath, year)
+		thumbnailYearPath := path.Join(thumbnailsPath, year)
+
+		err := os.Mkdir(thumbnailYearPath, os.ModePerm)
 		if err != nil {
-			log.Fatalf("could not check thumbnail existence. %v", err)
+			if !errors.Is(err, os.ErrExist) {
+				return fmt.Errorf("error creating thumbnails directory. %w", err)
+			}
 		}
 
-		if !exists {
-			// Open image file
-			imageFile, err := os.Open(path.Join(libraryPath, image.Name))
+		images, err := Year(libraryPath, year)
+		if err != nil {
+			return fmt.Errorf("error retrieving year images. %v", err)
+		}
+		for _, image := range images {
+			exists, err := exists(path.Join(thumbnailYearPath, image.Name))
 			if err != nil {
-				return fmt.Errorf("error opening image file. %w", err)
+				log.Fatalf("could not check thumbnail existence. %v", err)
 			}
 
-			_, err = GenerateThumbnail(imageFile, thumbnailsPath)
-			imageFile.Close()
-			if err != nil {
-				log.Printf("could not generate thumbnail for file %s. %v", image.Name, err)
+			if !exists {
+				// Open image file
+				imageFile, err := os.Open(path.Join(libraryYearPath, image.Name))
+				if err != nil {
+					return fmt.Errorf("error opening image file. %w", err)
+				}
+
+				_, err = generateThumbnail(imageFile, thumbnailYearPath)
+				imageFile.Close()
+				if err != nil {
+					log.Printf("could not generate thumbnail for file %s. %v", image.Name, err)
+				}
 			}
 		}
 	}
 	return nil
 }
 
-func GenerateThumbnail(imageFile *os.File, thumbnailsPath string) (string, error) {
+func generateThumbnail(imageFile *os.File, thumbnailsPath string) (string, error) {
 	// Decode image as jpeg
 	inputImage, _, err := image.Decode(imageFile)
 	if err != nil {
@@ -68,7 +85,7 @@ func GenerateThumbnail(imageFile *os.File, thumbnailsPath string) (string, error
 	if err != nil {
 		return "", fmt.Errorf("error extracting file info. %w", err)
 	}
-	thumbnailPath := path.Join(thumbnailsPath, GetThumbnailName(inputImageInfo.Name()))
+	thumbnailPath := path.Join(thumbnailsPath, getThumbnailName(inputImageInfo.Name()))
 	thumbnailFile, err := os.Create(thumbnailPath)
 	if err != nil {
 		return "", fmt.Errorf("error creating thumbnail file %s. %w", thumbnailPath, err)
@@ -83,7 +100,7 @@ func GenerateThumbnail(imageFile *os.File, thumbnailsPath string) (string, error
 	return path.Join(thumbnailsPath, thumbnailFile.Name()), nil
 }
 
-func Exists(imagePath string) (bool, error) {
+func exists(imagePath string) (bool, error) {
 	_, err := os.Stat(imagePath)
 	if err != nil {
 		if errors.Is(err, os.ErrNotExist) {
@@ -95,6 +112,10 @@ func Exists(imagePath string) (bool, error) {
 	return true, nil
 }
 
-func GetThumbnailName(imageName string) string {
+func getThumbnailName(imageName string) string {
 	return strings.TrimSuffix(imageName, filepath.Ext(imageName)) + ".jpg"
+}
+
+func getThumbnailPath(imagePath string) string {
+	return strings.TrimSuffix(imagePath, filepath.Ext(imagePath)) + ".jpg"
 }
