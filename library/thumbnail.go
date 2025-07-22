@@ -1,6 +1,7 @@
 package library
 
 import (
+	"embed"
 	"errors"
 	"fmt"
 	"image"
@@ -15,6 +16,11 @@ import (
 	"golang.org/x/image/draw"
 )
 
+const videoThumbnailName string = "video-thumbnail.jpg"
+
+//go:embed thumbnails/*
+var thumbnails embed.FS
+
 func GenerateAllThumbnails(libraryPath string, thumbnailsPath string) error {
 	_, err := os.Stat(thumbnailsPath)
 	if err != nil {
@@ -26,6 +32,11 @@ func GenerateAllThumbnails(libraryPath string, thumbnailsPath string) error {
 		} else {
 			return fmt.Errorf("error checking if thumbnails directory %s exsits. %w", thumbnailsPath, err)
 		}
+	}
+
+	err = copyVideoThumbnail(thumbnailsPath)
+	if err != nil {
+		return fmt.Errorf("error copying video thumbnail to thumbnails folder. %w", err)
 	}
 
 	years := Years(libraryPath)
@@ -45,6 +56,10 @@ func GenerateAllThumbnails(libraryPath string, thumbnailsPath string) error {
 			return fmt.Errorf("error retrieving year images. %v", err)
 		}
 		for _, image := range images {
+			if isVideo(image.Name) {
+				// Do not try to generate thumbnail for videos
+				continue
+			}
 			exists, err := exists(path.Join(thumbnailYearPath, image.Name))
 			if err != nil {
 				log.Fatalf("could not check thumbnail existence. %v", err)
@@ -64,6 +79,18 @@ func GenerateAllThumbnails(libraryPath string, thumbnailsPath string) error {
 				}
 			}
 		}
+	}
+	return nil
+}
+
+func copyVideoThumbnail(thumbnailsPath string) error {
+	videoThumbnail, err := thumbnails.ReadFile(path.Join("thumbnails", videoThumbnailName))
+	if err != nil {
+		return fmt.Errorf("error reading embed video thumbnail. %w", err)
+	}
+	err = os.WriteFile(path.Join(thumbnailsPath, videoThumbnailName), videoThumbnail, os.ModePerm)
+	if err != nil {
+		return fmt.Errorf("error saving video thumbnail. %w", err)
 	}
 	return nil
 }
@@ -114,9 +141,19 @@ func exists(imagePath string) (bool, error) {
 }
 
 func getThumbnailName(imageName string) string {
+	if isVideo(imageName) {
+		return videoThumbnailName
+	}
 	return strings.TrimSuffix(imageName, filepath.Ext(imageName)) + ".jpg"
 }
 
 func getThumbnailPath(imagePath string) string {
+	if isVideo(imagePath) {
+		return videoThumbnailName
+	}
 	return strings.TrimSuffix(imagePath, filepath.Ext(imagePath)) + ".jpg"
+}
+
+func isVideo(path string) bool {
+	return filepath.Ext(path) == ".mp4"
 }
