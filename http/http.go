@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"slices"
+	"strings"
 
 	"davidc.es/jag/configuration"
 	"davidc.es/jag/html"
@@ -52,6 +54,9 @@ func Serve(configuration configuration.Configuration) *http.Server {
 func index(libraryPath string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		years := library.Years(libraryPath)
+
+		// Sort years in descending natural sort order
+		slices.SortFunc(years, func(a, b string) int { return strings.Compare(b, a) })
 
 		err := html.Index(w, years)
 		if err != nil {
