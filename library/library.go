@@ -6,7 +6,6 @@ import (
 	"log"
 	"os"
 	"path"
-	"slices"
 	"time"
 )
 
@@ -70,8 +69,6 @@ func Year(libraryPath string, year string) ([]Image, error) {
 	if err != nil {
 		return nil, ErrUnexpected{cause: fmt.Errorf("error reading the contents of the year folder. %s. %v", yearPath, err)}
 	}
-
-	slices.SortFunc(fileInfos, func(a, b os.FileInfo) int { return b.ModTime().Compare(a.ModTime()) })
 
 	for _, file := range fileInfos {
 		if !file.IsDir() {

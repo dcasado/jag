@@ -81,6 +81,8 @@ func year(libraryPath string) http.HandlerFunc {
 			return
 		}
 
+		slices.SortFunc(images, func(a, b library.Image) int { return b.ModTime.Compare(a.ModTime) })
+
 		err = html.Year(w, images)
 		if err != nil {
 			html.InternalError(w)
