@@ -42,7 +42,7 @@ func InternalError(w io.Writer) error {
 func Year(w io.Writer, images []library.Image) error {
 	var data []*bucket
 	for _, image := range images {
-		date := image.ModTime.Format("January")
+		date := image.CreationTime.Format("January")
 		if b := containsBucket(data, date); b != nil {
 			b.Images = append(b.Images, imageData{ImagePath: image.Path, ThumbnailPath: image.ThumbnailPath})
 		} else {

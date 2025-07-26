@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"path"
+	"regexp"
 	"time"
 )
 
@@ -20,12 +21,18 @@ func (e ErrUnexpected) Error() string {
 }
 
 type Image struct {
+	CreationTime  time.Time
 	ModTime       time.Time
 	Path          string
 	Name          string
 	ThumbnailPath string
 	ThumbnailName string
 }
+
+var (
+	res    = regexp.MustCompile(`^.*(\d\d\d\d\d\d\d\d_\d\d\d\d\d\d).*$`)
+	layout = "20060102_150405"
+)
 
 func Years(libraryPath string) []string {
 	var years []string
@@ -74,9 +81,35 @@ func Year(libraryPath string, year string) ([]Image, error) {
 		if !file.IsDir() {
 			imageName := file.Name()
 			imagePath := path.Join(year, file.Name())
-			images = append(images, Image{ModTime: file.ModTime(), Path: imagePath, Name: imageName, ThumbnailName: getThumbnailName(imageName), ThumbnailPath: getThumbnailPath(imagePath)})
+			images = append(images, Image{
+				CreationTime: extractCreationTime(file),
+				ModTime:      file.ModTime(), Path: imagePath,
+				Name:          imageName,
+				ThumbnailName: getThumbnailName(imageName),
+				ThumbnailPath: getThumbnailPath(imagePath),
+			})
 		}
 	}
 
 	return images, nil
+}
+
+// Try to extract the creation date from the name of the file.
+// If that is not possible use file.ModTime() as fallback.
+func extractCreationTime(file os.FileInfo) time.Time {
+	matches := res.FindStringSubmatch(file.Name())
+	if len(matches) >= 2 {
+		match := matches[1]
+		if len(match) > 0 {
+			creationTime, err := time.Parse(layout, match)
+			if err != nil {
+				fmt.Printf("error extracting creation time from %s. Defaulting to ModTime(). %v\n", file.Name(), err)
+				return file.ModTime()
+			}
+			return creationTime
+		}
+	}
+
+	fmt.Printf("could not extract creation time from %s. Defaulting to ModTime().\n", file.Name())
+	return file.ModTime()
 }
