@@ -14,7 +14,10 @@ import (
 )
 
 func main() {
-	configuration := configuration.New()
+	configuration, err := configuration.New()
+	if err != nil {
+		log.Fatalf("error creating configuration. %v", err)
+	}
 
 	go func() {
 		err := library.GenerateAllThumbnails(configuration.LibraryPath(), configuration.ThumbnailsPath())

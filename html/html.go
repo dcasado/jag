@@ -25,18 +25,26 @@ type indexData struct {
 	Years []string
 }
 
+func Login(w io.Writer) error {
+	return template.Must(
+		template.New("login").ParseFS(htmlFiles, "layout.html.tmpl", "login_header.html.tmpl", "login.html.tmpl")).ExecuteTemplate(w, "base", nil)
+}
+
 func Index(w io.Writer, years []string) error {
 	data := indexData{Years: years}
 
-	return parseTemplate("index.html.tmpl").Execute(w, data)
+	return template.Must(
+		template.New("index").ParseFS(htmlFiles, "layout.html.tmpl", "header.html.tmpl", "index.html.tmpl")).ExecuteTemplate(w, "base", data)
 }
 
 func NotFound(w io.Writer) error {
-	return parseTemplate("404.html.tmpl").Execute(w, nil)
+	return template.Must(
+		template.New("not_found").ParseFS(htmlFiles, "layout.html.tmpl", "header.html.tmpl", "404.html.tmpl")).ExecuteTemplate(w, "base", nil)
 }
 
 func InternalError(w io.Writer) error {
-	return parseTemplate("internal_error.html.tmpl").Execute(w, nil)
+	return template.Must(
+		template.New("internal_error").ParseFS(htmlFiles, "layout.html.tmpl", "header.html.tmpl", "internal_error.html.tmpl")).ExecuteTemplate(w, "base", nil)
 }
 
 func Year(w io.Writer, images []library.Image) error {
@@ -52,7 +60,8 @@ func Year(w io.Writer, images []library.Image) error {
 		}
 	}
 
-	return parseTemplate("year.html.tmpl").Execute(w, data)
+	return template.Must(
+		template.New("year").ParseFS(htmlFiles, "layout.html.tmpl", "header.html.tmpl", "year.html.tmpl")).ExecuteTemplate(w, "base", data)
 }
 
 func containsBucket(buckets []*bucket, date string) *bucket {
@@ -62,9 +71,4 @@ func containsBucket(buckets []*bucket, date string) *bucket {
 		}
 	}
 	return nil
-}
-
-func parseTemplate(file string) *template.Template {
-	return template.Must(
-		template.New("layout.html.tmpl").ParseFS(htmlFiles, "layout.html.tmpl", file))
 }

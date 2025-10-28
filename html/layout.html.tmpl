@@ -1,3 +1,4 @@
+{{define "base"}}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -11,16 +12,14 @@
 </head>
 
 <body>
-  <header>
-    <a href="/">
-      <img class="logo" src="resources/logo.svg"/>
-    </a>
-  </header>
-  <div class="content">
-  {{block "content" .}}
+  {{block "header" .}}
+  {{end}}
+  <main>
+  {{block "main" .}}
   <!-- Fallback, if "content" is not defined elsewhere -->
   {{end}}
-  </div>
+  </main>
 </body>
 
 </html>
+{{end}}

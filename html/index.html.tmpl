@@ -1,7 +1,7 @@
-{{define "content"}}
-<div style="text-align: center">
+{{define "main"}}
+<div class="year-list">
 {{range .Years}}
-  <h2><a style="color: inherit" href="/{{.}}">{{.}}</a></h2>
+  <a href="/{{.}}">{{.}}</a>
 {{end}}
-</div
+</div>
 {{end}}
