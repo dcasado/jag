@@ -27,6 +27,8 @@ func Serve(configuration configuration.Configuration) *http.Server {
 		maxSessionAgeSeconds: configuration.MaxSessionAgeSeconds(),
 	}
 
+	html.ParseTemplates()
+
 	serveMux := http.NewServeMux()
 
 	serveMux.HandleFunc("GET /login", func(w http.ResponseWriter, r *http.Request) { html.Login(w) })
