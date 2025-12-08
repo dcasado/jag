@@ -30,7 +30,9 @@ func main() {
 	go func() {
 		for range ticker.C {
 			err := library.GenerateAllThumbnails(configuration.LibraryPath(), configuration.ThumbnailsPath())
-			log.Fatalf("error generating thumbnails. %v", err)
+			if err != nil {
+				log.Fatalf("error generating thumbnails. %v", err)
+			}
 		}
 	}()
 
